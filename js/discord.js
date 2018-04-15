@@ -14,6 +14,7 @@ socket.onmessage = function(event) {
         let contents = document.createTextNode(user + ": " + recv.d.content);
         msg.append(contents);
         document.getElementById("msg-list").appendChild(msg);
+        window.scrollTo(0, document.body.scrollHeight);
       }
       console.log(recv);
       break;
