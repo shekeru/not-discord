@@ -8,7 +8,7 @@ socket.onmessage = function(event) {
   let recv = JSON.parse(event.data);
   switch (recv.op) {
     case 0:
-      if (recv.t === "MESSAGE_CREATE") {
+      if (recv.t === "MESSAGE_CREATE" && recv.d.content !== "") {
         let user = recv.d.author.username + "#" + recv.d.author.discriminator;
         let msg = document.createElement("DIV");
         let contents = document.createTextNode(user + ": " + recv.d.content);
