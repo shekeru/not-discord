@@ -1,0 +1,6 @@
+*[repeat]:first-child {
+  display: none;
+}
+.debug {
+  display: inherit;
+}

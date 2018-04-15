@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Not Discord</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/template.css">
+    <link rel="stylesheet" href="css/general.css">
+  </head>
+  <body>
+    <section id="user-float" class="rainbow nospace">
+      <span print="user.username">username</span>
+		  #
+		  <span print="user.discriminator">0000</span>
+    </section>
+    <section id="server-list">
+      <div repeat="guilds.#">
+        <span print="guilds.#.name">"Unavailable Server"</span>
+        (<span print="guilds.#.id">xxxxxxxxxxxxxxxx</span>)
+      </div>
+    </section>
+    # Guilds: <span print="guilds.length">state.guilds.lenggdrth</span>
+    <br>
+    # Online: <span eval="guilds.#.unavailable" guilds>return guilds.reduce((y, x) => y+(x.unavailable?0:1), 0);</span>
+    <br>
+    <section id="msg-list">
+      <div repeat="messages.#">
+        <span print="messages.#.author.username">user</span>:
+        <span print="messages.#.content">*no text content*</span>
+      </div>
+    </section>
+    <script src="js/discord.js"></script>
+  </body>
+</html>
