@@ -1,30 +1,32 @@
 const client_token = "token";
 const socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
 function heartbeat() {
-  console.log("heartbeat!");
+  console.log("Lub...");
   socket.send(JSON.stringify({"op":1,"d":{}}));
 }
 socket.onmessage = function(event) {
   let recv = JSON.parse(event.data);
   switch (recv.op) {
     case 0:
-      //dispatch
+      if (recv.t === "MESSAGE_CREATE") {
+        let user = recv.d.author.username + "#" + recv.d.author.discriminator;
+        let msg = document.createElement("DIV");
+        let contents = document.createTextNode(user + ": " + recv.d.content);
+        msg.append(contents);
+        document.getElementById("msg-list").appendChild(msg);
+      }
       console.log(recv);
       break;
     case 1:
-      //Gateway requesting heartbeat
       heartbeat();
       break;
     case 7:
-      //gateway reconnection
       console.log("gateway reconnection");
       break;
     case 9:
-      //invalid session
       console.log("invalid session");
       break;
     case 10:
-      //hello
       setInterval(heartbeat, recv.d.heartbeat_interval);
       socket.send(JSON.stringify({"op":2,"d":{
         token: client_token,
@@ -38,11 +40,9 @@ socket.onmessage = function(event) {
       }}));
       break;
     case 11:
-      //heartbeat ack
-      console.log("heartbeat received!");
+      console.log("...dub.");
       break;
     default:
-      //fallback
       console.log("error;");
       console.log(recv);
   }
