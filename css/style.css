@@ -6,40 +6,71 @@ body {
   background: black;
   font-family: TenbyFive;
   color: white;
+  overflow-x: hidden;
+  -webkit-user-select: none;
 }
 .nospace {
   display:flex;
 }
 #user-float {
-  position: absolute;
+  position: fixed;
   font-family: TenbyFive;
-  font-size: 18pt;
-  right:0.2pt;
-  top:0.2pt;
+  font-size: 1.7rem;
+  right: .25rem;
+  top: 0;
 }
 .rainbow {
   animation: rainbow 38s infinite;
 }
-
+#msg-list {
+  margin-bottom: 1.9rem;
+}
+#typing-list {
+  border-top: 1px dotted grey;
+  padding-top: .3rem;
+  float: left;
+  position: fixed;
+  width: 100%;
+  bottom: .2rem;
+}
+#connection {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: .4rem;
+}
+input {
+  width: 50rem;
+}
+button {
+  font-size: 1.09rem;
+  padding: 0;
+}
+#username, #discriminator, #guild {
+  color: crimson;
+}
+#hash, #at {
+  color: lightcoral;
+}
 @keyframes rainbow {
   0% {color: #d65c97;}
   5% {color: #5cd666;}
   10% {color: #a55cd6;}
-  15.0% {color: #5c7cd6;}
+  15% {color: #5c7cd6;}
   20% {color: #d65c7a;}
   25% {color: #81d65c;}
-  30.0% {color: #835cd6;}
+  30% {color: #835cd6;}
   35% {color: #685cd6;}
   40% {color: #5c9dd6;}
   45% {color: #5cd670;}
   50% {color: #d6625c;}
-  55.0% {color: #d6835c;}
-  60.0% {color: #d6605c;}
+  55% {color: #d6835c;}
+  60% {color: #d6605c;}
   65% {color: #be5cd6;}
   70% {color: #5c8dd6;}
   75% {color: #95d65c;}
   80% {color: #d69d5c;}
-  85.0% {color: #d65c81;}
+  85% {color: #d65c81;}
   90% {color: #5cd666;}
   95% {color: #d67e5c;}
   100% {color: #64d65c;}
