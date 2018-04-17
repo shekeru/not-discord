@@ -38,6 +38,10 @@ body {
   bottom: 0;
   right: 0;
   padding: .4rem;
+  transition: all 1s ease-in-out 0s;
+}
+#connection.vanish {
+  bottom: -10%;
 }
 input {
   width: 50rem;
