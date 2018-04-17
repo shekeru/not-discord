@@ -9,21 +9,21 @@
     <link rel="icon" href="favicon.png" type="image/png" sizes="256x256">
   </head>
   <body>
-    <section id="user-float" class="rainbow nospace">
-      <span id="status">Connecting...</span>
+    <section id="typing-list">
+      <span id="typing-status">No one is typing.</span>
     </section>
     <section id="server-list">
     </section>
+    <section id="user-float" class="rainbow nospace">
+      <span id="status">Connecting...</span>
+    </section>
     <section id="msg-list">
     </section>
-    <section id="typing-list">
-      <span>Example is typing...</span>
-    </section>
-    <section id="connection" class="dark">
+    <section id="connection">
       <div class="input-group">
         <input type="text" id="token" class="form-control" placeholder="Token">
         <div class="input-group-append">
-          <button class="btn btn-dark" onclick="connect()">&#x279C;</button>
+          <button class="btn btn-secondary" onclick="connect()">&#x279C;</button>
         </div>
       </div>
     </section>

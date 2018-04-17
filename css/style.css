@@ -3,14 +3,30 @@
     src: url("../fonts/tenby-five.otf") format("opentype");
 }
 body {
-  background: black;
+  background: #23272A;
   font-family: TenbyFive;
   color: white;
   overflow-x: hidden;
   -webkit-user-select: none;
 }
 .nospace {
-  display:flex;
+  display: flex;
+}
+#server-list {
+  position: fixed;
+  font-size: smaller;
+  top: 0;
+  right: 0;
+  background-color: #2C2F33;
+  height: 100vh;
+  overflow-y: scroll;
+  width: 0;
+  padding: 0;
+  transition: all 1s ease-in-out;
+}
+#server-list.appear {
+  width: 280px;
+  padding: 1rem;
 }
 #user-float {
   position: fixed;
@@ -18,17 +34,23 @@ body {
   font-size: 1.7rem;
   right: .25rem;
   top: 0;
+  transition: all 1s ease-in-out;
+}
+#user-float.move {
+  right: 285px;
 }
 .rainbow {
   animation: rainbow 38s infinite;
 }
 #msg-list {
   margin-bottom: 3rem;
+  margin-right: 280px;
 }
 #typing-list {
   border-top: 1px dotted grey;
-  padding-top: 1.4rem;
-  float: left;
+  padding-top: .9rem;
+  padding-bottom: .5rem;
+  padding-left: 1rem;
   position: fixed;
   width: 100%;
   bottom: .2rem;
@@ -38,7 +60,7 @@ body {
   bottom: 0;
   right: 0;
   padding: .4rem;
-  transition: all 1s ease-in-out 0s;
+  transition: all 1s ease-in-out;
 }
 #connection.vanish {
   bottom: -10%;
