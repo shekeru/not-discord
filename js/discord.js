@@ -2,7 +2,6 @@ document.getElementById("status").innerHTML = "Waiting...";
 function connect() {
   document.getElementById("connection").classList += " vanish";
   document.getElementById("status").innerHTML = "Connecting...";
-
   function heartbeat() {
     console.log("Lub...");
     socket.send(JSON.stringify({"op":1,"d":{}}));
