@@ -2,12 +2,14 @@ document.getElementById("status").innerHTML = "Waiting...";
 function connect() {
   document.getElementById("connection").classList += " vanish";
   document.getElementById("status").innerHTML = "Connecting...";
+
   function heartbeat() {
     console.log("Lub...");
     socket.send(JSON.stringify({"op":1,"d":{}}));
   }
-  client_token = document.getElementById("token").value;
-  socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
+  const guilds = {};
+  const client_token = document.getElementById("token").value;
+  const socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
   socket.onmessage = function(event) {
     let recv = JSON.parse(event.data);
     switch (recv.op) {
@@ -30,7 +32,12 @@ function connect() {
           hash.append("#");
           discriminator.append(recv.d.author.discriminator);
           at.append("@");
-          guild.append(recv.d.guild_id);
+          for (var i = 0; i < Object.keys(guilds).length; i++) {
+            if (Object.keys(guilds)[i] == recv.d.guild_id) {
+              guild.append(guilds[recv.d.guild_id]);
+              i = guilds.length;
+            }
+          }
           message.append(": " + recv.d.content);
           string.append(username);
           string.append(hash);
@@ -41,7 +48,12 @@ function connect() {
           document.getElementById("msg-list").appendChild(string);
           window.scrollTo(0, document.body.scrollHeight);
         } else if (recv.t === "READY") {
+          console.log(recv);
           document.getElementById("status").innerHTML = recv.d.user.username + "#" + recv.d.user.discriminator;
+          for (var i = 0; i < recv.d.guilds.length; i++) {
+            guilds[recv.d.guilds[i].id] = recv.d.guilds[i].name;
+          }
+          console.log(guilds);
         }
         break;
       case 1:

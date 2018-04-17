@@ -23,11 +23,11 @@ body {
   animation: rainbow 38s infinite;
 }
 #msg-list {
-  margin-bottom: 1.9rem;
+  margin-bottom: 3rem;
 }
 #typing-list {
   border-top: 1px dotted grey;
-  padding-top: .3rem;
+  padding-top: 1.4rem;
   float: left;
   position: fixed;
   width: 100%;
