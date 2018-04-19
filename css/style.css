@@ -9,22 +9,19 @@ body {
   overflow-x: hidden;
   -webkit-user-select: none;
 }
-.nospace {
-  display: flex;
-}
 #server-list {
   position: fixed;
   font-size: smaller;
   top: 0;
   right: 0;
-  background-color: #2C2F33;
+  background: #2C2F33;
   height: 100vh;
   overflow-y: scroll;
   width: 0;
   padding: 0;
   transition: all 1s ease-in-out;
 }
-#server-list.appear {
+#server-list.active {
   width: 280px;
   padding: 1rem;
 }
@@ -36,11 +33,16 @@ body {
   top: 0;
   transition: all 1s ease-in-out;
 }
-#user-float.move {
+#user-float.active {
   right: 285px;
 }
-.rainbow {
-  animation: rainbow 38s infinite;
+.btn-danger {
+  float: right;
+  opacity: 0!important;
+  transition: all 1s ease-in-out;
+}
+.btn-danger.active {
+  opacity: 1!important;
 }
 #msg-list {
   margin-bottom: 3rem;
@@ -48,12 +50,13 @@ body {
 }
 #typing-list {
   border-top: 1px dotted grey;
-  padding-top: .9rem;
-  padding-bottom: .5rem;
+  padding-top: 1rem;
+  padding-bottom: .6rem;
   padding-left: 1rem;
   position: fixed;
   width: 100%;
-  bottom: .2rem;
+  bottom: 0;
+  background-color:#23272A;
 }
 #connection {
   position: fixed;
@@ -62,7 +65,7 @@ body {
   padding: .4rem;
   transition: all 1s ease-in-out;
 }
-#connection.vanish {
+#connection.active {
   bottom: -10%;
 }
 input {
@@ -75,29 +78,36 @@ button {
 #username, #discriminator, #guild {
   color: crimson;
 }
-#hash, #at {
-  color: lightcoral;
+.private {
+  color: lime;
+}
+.rainbow {
+  animation-name: rainbow;
+  animation-duration: 50s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
 }
 @keyframes rainbow {
-  0% {color: #d65c97;}
-  5% {color: #5cd666;}
-  10% {color: #a55cd6;}
-  15% {color: #5c7cd6;}
-  20% {color: #d65c7a;}
-  25% {color: #81d65c;}
-  30% {color: #835cd6;}
-  35% {color: #685cd6;}
-  40% {color: #5c9dd6;}
-  45% {color: #5cd670;}
-  50% {color: #d6625c;}
-  55% {color: #d6835c;}
-  60% {color: #d6605c;}
-  65% {color: #be5cd6;}
-  70% {color: #5c8dd6;}
-  75% {color: #95d65c;}
-  80% {color: #d69d5c;}
-  85% {color: #d65c81;}
-  90% {color: #5cd666;}
-  95% {color: #d67e5c;}
-  100% {color: #64d65c;}
+  0%{color:#5c66d6}
+  5%{color:#765cd6}
+  10%{color:#8bd65c}
+  15%{color:#d65cc8}
+  20%{color:#d65cc2}
+  25%{color:#d65c7e}
+  30%{color:#cad65c}
+  35%{color:#5c7ed6}
+  40%{color:#9fd65c}
+  45%{color:#68d65c}
+  50%{color:#c25cd6}
+  55%{color:#5cd678}
+  60%{color:#5cd69b}
+  65%{color:#d2d65c}
+  70%{color:#5cd69f}
+  75%{color:#d6605c}
+  80%{color:#5cbed6}
+  85%{color:#d6bc5c}
+  90%{color:#975cd6}
+  95%{color:#5cd6b6}
+  100%{color:#d65cba}
 }

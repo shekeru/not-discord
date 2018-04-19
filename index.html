@@ -10,12 +10,17 @@
   </head>
   <body>
     <section id="typing-list">
-      <span id="typing-status">No one is typing.</span>
+      <span id="typing-status">Disconnected.</span>
     </section>
     <section id="server-list">
     </section>
-    <section id="user-float" class="rainbow nospace">
-      <span id="status">Connecting...</span>
+    <div class="form-check">
+      <input class="form-check-input position-static" type="checkbox" value="option1">
+    </div>
+    <section id="user-float" class="rainbow">
+      <span id="status">Loading...</span>
+      <br>
+      <button id="disconnect" class="btn btn-danger" onclick="disconnect(0)" disabled>Disconnect</button>
     </section>
     <section id="msg-list">
     </section>
