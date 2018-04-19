@@ -120,6 +120,11 @@ function connect() {
               string.append(members);
               document.getElementById("server-list").appendChild(string);
             }
+          } else {
+            let bot = document.createElement("SPAN");
+            bot.id = "bot";
+            bot.append("BOT");
+            document.getElementById("status").appendChild(bot);
           }
         } else if (recv.t === "TYPING_START") {
           typing_users[recv.d.user_id] = 5;

@@ -36,6 +36,16 @@ body {
 #user-float.active {
   right: 285px;
 }
+#bot {
+  background-color: #7289DA;
+  color: white;
+  font-size: smaller;
+  border-radius: 3px;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: .2rem;
+}
 .btn-danger {
   float: right;
   opacity: 0!important;
