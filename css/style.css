@@ -46,6 +46,10 @@ body {
   padding-right: 5px;
   margin-left: .2rem;
 }
+.btn-outline-warning {
+  width: 100%;
+  margin-bottom: 1rem;
+}
 .btn-danger {
   float: right;
   opacity: 0!important;
@@ -78,9 +82,6 @@ body {
 #connection.active {
   bottom: -10%;
 }
-input {
-  width: 50rem;
-}
 button {
   font-size: 1.09rem;
   padding: 0;
@@ -88,8 +89,17 @@ button {
 #username, #discriminator, #guild {
   color: crimson;
 }
+#msg-list div {
+  color: lightcoral;
+}
+#message {
+  color: white;
+}
+.highlight {
+  color: lightskyblue!important;
+}
 .private {
-  color: lime;
+  color: palegreen!important;
 }
 .rainbow {
   animation-name: rainbow;

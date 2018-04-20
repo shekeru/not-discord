@@ -37,7 +37,7 @@ function reconnect() {
     }));
   }
 }
-async function decrement() {
+function decrement() {
   for (var i = 0; i < Object.keys(typing_users).length; i++) {
     typing_users[Object.keys(typing_users)[i]] -= 1;
     if (typing_users[Object.keys(typing_users)[i]] == 0) {
@@ -46,9 +46,32 @@ async function decrement() {
   }
   document.getElementById("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
 }
+function updateFilter() {
+  document.getElementById("filter").innerHTML = "";
+  for (var i = 0; i < Object.keys(ignored).length; i++) {
+    document.getElementById("filter").innerHTML += "#msg-list #" + Object.keys(ignored)[i] + "{display:none}";
+  }
+}
+function hide(id) {
+  document.cookie = JSON.stringify({user_id, ignored});
+  if (document.getElementById(id).firstChild.checked) {
+    ignored[id] = "1";
+    updateFilter();
+  } else {
+    delete ignored[id];
+    updateFilter();
+  }
+}
+function resetCookie() {
+  document.cookie = "";
+  location.reload();
+}
 function connect() {
   socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
   guilds = {};
+  user_id = "";
+  ignored = {};
+  highlighted = {};
   typing_users = {};
   beating = 1;
   s = 0;
@@ -66,42 +89,59 @@ function connect() {
     switch (recv.op) {
       case 0:
         if (recv.t === "MESSAGE_CREATE" && recv.d.content !== "") {
-          let string = document.createElement("DIV");
-          let username = document.createElement("SPAN");
-          let discriminator = document.createElement("SPAN");
-          let guild = document.createElement("SPAN");
-          let message = document.createElement("SPAN");
-          username.id = "username";
-          discriminator.id = "discriminator";
-          guild.id = "guild";
-          message.id = "message";
-          username.append(recv.d.author.username);
-          discriminator.append(recv.d.author.discriminator);
-          if (recv.d.guild_id) {
-            for (var i = 0; i < Object.keys(guilds).length; i++) {
-              if (Object.keys(guilds)[i] == recv.d.guild_id) {
-                guild.append(guilds[recv.d.guild_id]);
-                i = guilds.length;
+          if (!ignored["g" + recv.d.guild_id]) {
+            let string = document.createElement("DIV");
+            let username = document.createElement("SPAN");
+            let discriminator = document.createElement("SPAN");
+            let guild = document.createElement("SPAN");
+            let message = document.createElement("SPAN");
+            string.id = "g" + recv.d.guild_id;
+            username.id = "username";
+            discriminator.id = "discriminator";
+            guild.id = "guild";
+            message.id = "message";
+            username.append(recv.d.author.username);
+            discriminator.append(recv.d.author.discriminator);
+            if (recv.d.guild_id) {
+              for (var i = 0; i < Object.keys(guilds).length; i++) {
+                if (Object.keys(guilds)[i] == recv.d.guild_id) {
+                  guild.append(guilds[recv.d.guild_id]);
+                  i = guilds.length;
+                }
+              }
+            } else {
+              guild.append("PM");
+              message.classList = "private";
+            }
+            for (var i = 0; i < Object.keys(recv.d.mentions).length; i++) {
+              if (recv.d.mentions[i].id == user_id) {
+                message.classList = "highlight";
+                i = Object.keys(recv.d.mentions).length;
               }
             }
-          } else {
-            guild.append("PM");
-            message.classList = "private";
+            message.append(recv.d.content);
+            string.append(username);
+            string.append("#");
+            string.append(discriminator);
+            string.append("@");
+            string.append(guild);
+            string.append(": ");
+            string.append(message);
+            if (document.getElementById("msg-list").childNodes.length == 100) {
+              document.getElementById("msg-list").removeChild(document.getElementById("msg-list").childNodes[0]);
+            }
+            document.getElementById("msg-list").appendChild(string);
+            window.scrollTo(0, document.body.scrollHeight);
           }
-          message.append(recv.d.content);
-          string.append(username);
-          string.append("#");
-          string.append(discriminator);
-          string.append("@");
-          string.append(guild);
-          string.append(": ");
-          string.append(message);
-          if (document.getElementById("msg-list").childNodes.length == 100) {
-            document.getElementById("msg-list").removeChild(document.getElementById("msg-list").childNodes[0]);
-          }
-          document.getElementById("msg-list").appendChild(string);
-          window.scrollTo(0, document.body.scrollHeight);
         } else if (recv.t === "READY") {
+          user_id = recv.d.user.id;
+          if (document.cookie) {
+            let cookieData = JSON.parse(document.cookie);
+            if (cookieData.user_id == user_id) {
+              ignored = cookieData.ignored;
+              updateFilter();
+            }
+          }
           sessionId = recv.d.session_id;
           setInterval(decrement, 1000);
           document.getElementById("status").innerHTML = recv.d.user.username + "#" + recv.d.user.discriminator;
@@ -109,13 +149,19 @@ function connect() {
             for (var i = 0; i < recv.d.guilds.length; i++) {
               guilds[recv.d.guilds[i].id] = recv.d.guilds[i].name;
               let string = document.createElement("DIV");
+              let box = document.createElement("INPUT");
               let guild = document.createElement("SPAN");
               let members = document.createElement("SPAN");
-              string.id = recv.d.guilds[i].id;
+              string.id = "g" + recv.d.guilds[i].id;
+              box.type = "checkbox";
+              box.value = recv.d.guilds[i].id;
+              let id = recv.d.guilds[i].id;
+              box.addEventListener("click", function(){hide("g" + id);});
               guild.id = "guild";
               members.id = "members";
-              guild.append(recv.d.guilds[i].name);
+              guild.append(" " + recv.d.guilds[i].name);
               members.append(": " + recv.d.guilds[i].member_count);
+              string.append(box);
               string.append(guild);
               string.append(members);
               document.getElementById("server-list").appendChild(string);
