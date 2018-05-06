@@ -1,16 +1,18 @@
 document.getElementById("status").innerHTML = "Waiting...";
 function disconnect(state) {
-  if (state == 0) {
+  clearInterval(pacemaker);
+  clearInterval(decrementer);
+  if (state == "0") {
     document.getElementById("typing-status").innerHTML = "Disconnected.";
   }
   socket.close();
-  clearInterval(pacemaker);
   document.getElementById("status").innerHTML = "Waiting...";
   document.getElementById("connection").classList = "";
   document.getElementById("server-list").classList = "";
   document.getElementById("disconnect").classList = "btn btn-danger";
   document.getElementById("user-float").classList = "rainbow";
   document.getElementById("disconnect").disabled = true;
+  document.getElementById("theme").innerHTML = "";
   let j = document.getElementById("server-list").childNodes.length;
   for (var i = 0; i < j; i++) {
     document.getElementById("server-list").removeChild(document.getElementById("server-list").childNodes[0]);
@@ -135,6 +137,9 @@ function connect() {
           }
         } else if (recv.t === "READY") {
           user_id = recv.d.user.id;
+          if (recv.d.user_settings.theme === "light") {
+            document.getElementById("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
+          }
           if (document.cookie) {
             let cookieData = JSON.parse(document.cookie);
             if (cookieData.user_id == user_id) {
@@ -143,7 +148,7 @@ function connect() {
             }
           }
           sessionId = recv.d.session_id;
-          setInterval(decrement, 1000);
+          decrementer = setInterval(decrement, 1000);
           document.getElementById("status").innerHTML = recv.d.user.username + "#" + recv.d.user.discriminator;
           if (recv.d.user.bot !== true) {
             for (var i = 0; i < recv.d.guilds.length; i++) {

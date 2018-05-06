@@ -8,6 +8,7 @@ body {
   color: white;
   overflow-x: hidden;
   -webkit-user-select: none;
+  transition: all 1s ease-in-out;
 }
 #server-list {
   position: fixed;
