@@ -9,9 +9,7 @@ function disconnect(state) {
   document.getElementById("status").innerHTML = "Waiting...";
   document.getElementById("connection").classList = "";
   document.getElementById("server-list").classList = "";
-  document.getElementById("disconnect").classList = "btn btn-danger";
   document.getElementById("user-float").classList = "rainbow";
-  document.getElementById("disconnect").disabled = true;
   document.getElementById("theme").innerHTML = "";
   let j = document.getElementById("server-list").childNodes.length;
   for (var i = 0; i < j; i++) {
@@ -32,7 +30,7 @@ function reconnect() {
     socket.send(JSON.stringify({
       "op": 6,
       "d": {
-        "token": client_token,
+        "token": clientToken,
         "session_id": sessionId,
         "seq": s
       }
@@ -48,41 +46,21 @@ function decrement() {
   }
   document.getElementById("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
 }
-function updateFilter() {
-  document.getElementById("filter").innerHTML = "";
-  for (var i = 0; i < Object.keys(ignored).length; i++) {
-    document.getElementById("filter").innerHTML += "#msg-list #" + Object.keys(ignored)[i] + "{display:none}";
-  }
-}
-function hide(id) {
-  document.cookie = JSON.stringify({user_id, ignored});
-  if (document.getElementById(id).firstChild.checked) {
-    ignored[id] = "1";
-    updateFilter();
-  } else {
-    delete ignored[id];
-    updateFilter();
-  }
-}
-function resetCookie() {
-  document.cookie = "";
-  location.reload();
-}
 function connect() {
   socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
   guilds = {};
   user_id = "";
-  ignored = {};
+  ignoredGuilds = {};
+  ignoredChannels = {};
+  ignoredUsers = {};
   highlighted = {};
   typing_users = {};
   beating = 1;
   s = 0;
-  client_token = document.getElementById("token").value;
+  clientToken = document.getElementById("token").value;
   document.getElementById("connection").classList += "active";
-  document.getElementById("server-list").classList += "active";
-  document.getElementById("disconnect").classList += " active";
+  document.getElementById("server-list").classList += " active";
   document.getElementById("user-float").classList += " active";
-  document.getElementById("disconnect").disabled = false;
   document.getElementById("status").innerHTML = "Connecting...";
   document.getElementById("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
   socket.onmessage = function(event) {
@@ -91,7 +69,7 @@ function connect() {
     switch (recv.op) {
       case 0:
         if (recv.t === "MESSAGE_CREATE" && recv.d.content !== "") {
-          if (!ignored["g" + recv.d.guild_id]) {
+          if (!ignoredGuilds["g" + recv.d.guild_id]) {
             let string = document.createElement("DIV");
             let username = document.createElement("SPAN");
             let discriminator = document.createElement("SPAN");
@@ -136,16 +114,10 @@ function connect() {
             window.scrollTo(0, document.body.scrollHeight);
           }
         } else if (recv.t === "READY") {
+          console.log(recv.d);
           user_id = recv.d.user.id;
           if (recv.d.user_settings.theme === "light") {
             document.getElementById("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
-          }
-          if (document.cookie) {
-            let cookieData = JSON.parse(document.cookie);
-            if (cookieData.user_id == user_id) {
-              ignored = cookieData.ignored;
-              updateFilter();
-            }
           }
           sessionId = recv.d.session_id;
           decrementer = setInterval(decrement, 1000);
@@ -153,24 +125,39 @@ function connect() {
           if (recv.d.user.bot !== true) {
             for (var i = 0; i < recv.d.guilds.length; i++) {
               guilds[recv.d.guilds[i].id] = recv.d.guilds[i].name;
-              let string = document.createElement("DIV");
-              let box = document.createElement("INPUT");
+              let guildId = "g" + recv.d.guilds[i].id;
+              let card = document.createElement("DIV");
+              card.classList = "card bg-dark";
+              let header = document.createElement("BUTTON");
+              header.classList = "card-header mb-0 btn d-flex justify-content-between collapsed";
+              header.setAttribute("data-toggle", "collapse");
+              header.setAttribute("data-target", "#" + guildId);
               let guild = document.createElement("SPAN");
               let members = document.createElement("SPAN");
-              string.id = "g" + recv.d.guilds[i].id;
-              box.type = "checkbox";
-              box.value = recv.d.guilds[i].id;
-              let id = recv.d.guilds[i].id;
-              box.addEventListener("click", function(){hide("g" + id);});
+              let body = document.createElement("DIV");
+              body.id = guildId;
+              body.classList = "collapse";
+              body.setAttribute("data-parent", "#server-list");
+              members.classList = "badge badge-light";
               guild.id = "guild";
               members.id = "members";
-              guild.append(" " + recv.d.guilds[i].name);
-              members.append(": " + recv.d.guilds[i].member_count);
-              string.append(box);
-              string.append(guild);
-              string.append(members);
-              document.getElementById("server-list").appendChild(string);
+              for (var j = 0; j < recv.d.guilds[i].channels.length; j++) {
+                if (recv.d.guilds[i].channels[j].type === 0) {
+                  let channel = document.createElement("DIV");
+                  channel.id = "c" + recv.d.guilds[i].channels[j].id;
+                  channel.append("#" + recv.d.guilds[i].channels[j].name);
+                  body.append(channel);
+                }
+              }
+              guild.append(recv.d.guilds[i].name);
+              members.append(recv.d.guilds[i].member_count);
+              header.append(guild);
+              header.append(members);
+              card.append(header);
+              card.append(body);
+              document.getElementById("server-list").appendChild(card);
             }
+            $(document).ready(function(){$("[data-toggle='collapse']").collapse();});
           } else {
             let bot = document.createElement("SPAN");
             bot.id = "bot";
@@ -192,6 +179,8 @@ function connect() {
           string.append(guild);
           string.append(members);
           document.getElementById("server-list").appendChild(string);
+        } else if (recv.t !== "MESSAGE_CREATE") {
+          console.log("Unhandled " + recv.t + " event.");
         }
         break;
       case 1:
@@ -209,7 +198,7 @@ function connect() {
         pacemaker = setInterval(heartbeat, recv.d.heartbeat_interval);
         socket.send(JSON.stringify({
           "op": 2,"d": {
-            token: client_token,
+            token: clientToken,
             properties: {
               $os: "windows",
               $browser: "disco",
