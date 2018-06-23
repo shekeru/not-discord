@@ -1,29 +1,30 @@
-document.getElementById("status").innerHTML = "Waiting...";
+var elem = document.getElementById.bind(document);
+if (localStorage.getItem('prev_token'))
+  elem("token").defaultValue = localStorage.getItem('prev_token');
+elem("status").innerHTML = "Waiting...";
 function disconnect(state) {
   clearInterval(pacemaker);
   clearInterval(decrementer);
   if (state == "0") {
-    document.getElementById("typing-status").innerHTML = "Disconnected.";
-  }
-  socket.close();
-  document.getElementById("status").innerHTML = "Waiting...";
-  document.getElementById("connection").classList = "";
-  document.getElementById("server-list").classList = "";
-  document.getElementById("user-float").classList = "rainbow";
-  document.getElementById("theme").innerHTML = "";
-  let j = document.getElementById("server-list").childNodes.length;
+    elem("typing-status").innerHTML = "Disconnected.";
+  }; socket.close();
+  elem("status").innerHTML = "Waiting...";
+  elem("connection").classList = "";
+  elem("server-list").classList = "";
+  elem("user-float").classList = "rainbow";
+  elem("theme").innerHTML = "";
+  let j = elem("server-list").childNodes.length;
   for (var i = 0; i < j; i++) {
-    document.getElementById("server-list").removeChild(document.getElementById("server-list").childNodes[0]);
+    elem("server-list").removeChild(elem("server-list").childNodes[0]);
   }
-  j = document.getElementById("msg-list").childNodes.length;
+  j = elem("msg-list").childNodes.length;
   for (var i = 0; i < j; i++) {
-    document.getElementById("msg-list").removeChild(document.getElementById("msg-list").childNodes[0]);
+    elem("msg-list").removeChild(elem("msg-list").childNodes[0]);
   }
 }
 function heartbeat() {
   socket.send(JSON.stringify({"op":1,"d":{}}));
-  beating = 0;
-  setTimeout(reconnect, 5000);
+  beating = 0; setTimeout(reconnect, 5000);
 }
 function reconnect() {
   if (beating == 0) {
@@ -41,10 +42,10 @@ function decrement() {
   for (var i = 0; i < Object.keys(typing_users).length; i++) {
     typing_users[Object.keys(typing_users)[i]] -= 1;
     if (typing_users[Object.keys(typing_users)[i]] == 0) {
+      elem("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
       delete typing_users[Object.keys(typing_users)[i]];
     }
   }
-  document.getElementById("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
 }
 function connect() {
   socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
@@ -57,12 +58,12 @@ function connect() {
   typing_users = {};
   beating = 1;
   s = 0;
-  clientToken = document.getElementById("token").value;
-  document.getElementById("connection").classList += "active";
-  document.getElementById("server-list").classList += " active";
-  document.getElementById("user-float").classList += " active";
-  document.getElementById("status").innerHTML = "Connecting...";
-  document.getElementById("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
+  clientToken = elem("token").value;
+  elem("connection").classList += "active";
+  elem("server-list").classList += " active";
+  elem("user-float").classList += " active";
+  elem("status").innerHTML = "Connecting...";
+  elem("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
   socket.onmessage = function(event) {
     let recv = JSON.parse(event.data);
     s = recv.s;
@@ -103,25 +104,25 @@ function connect() {
             string.append(username);
             string.append("#");
             string.append(discriminator);
-            string.append("@");
+            string.append("elem");
             string.append(guild);
             string.append(": ");
             string.append(message);
-            if (document.getElementById("msg-list").childNodes.length == 100) {
-              document.getElementById("msg-list").removeChild(document.getElementById("msg-list").childNodes[0]);
+            if (elem("msg-list").childNodes.length >= 100) {
+              elem("msg-list").removeChild(elem("msg-list").childNodes[0]);
             }
-            document.getElementById("msg-list").appendChild(string);
+            elem("msg-list").appendChild(string);
             window.scrollTo(0, document.body.scrollHeight);
           }
         } else if (recv.t === "READY") {
-          console.log(recv.d);
-          user_id = recv.d.user.id;
+          localStorage.setItem("prev_token", clientToken);
+          user_id = recv.d.user.id; console.log(recv.d);
           if (recv.d.user_settings.theme === "light") {
-            document.getElementById("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
+            elem("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
           }
           sessionId = recv.d.session_id;
           decrementer = setInterval(decrement, 1000);
-          document.getElementById("status").innerHTML = recv.d.user.username + "#" + recv.d.user.discriminator;
+          elem("status").innerHTML = recv.d.user.username + "#" + recv.d.user.discriminator;
           if (recv.d.user.bot !== true) {
             for (var i = 0; i < recv.d.guilds.length; i++) {
               guilds[recv.d.guilds[i].id] = recv.d.guilds[i].name;
@@ -155,14 +156,14 @@ function connect() {
               header.append(members);
               card.append(header);
               card.append(body);
-              document.getElementById("server-list").appendChild(card);
+              elem("server-list").appendChild(card);
             }
             $(document).ready(function(){$("[data-toggle='collapse']").collapse();});
           } else {
             let bot = document.createElement("SPAN");
             bot.id = "bot";
             bot.append("BOT");
-            document.getElementById("status").appendChild(bot);
+            elem("status").appendChild(bot);
           }
         } else if (recv.t === "TYPING_START") {
           typing_users[recv.d.user_id] = 5;
@@ -178,7 +179,7 @@ function connect() {
           members.append(": " + recv.d.member_count);
           string.append(guild);
           string.append(members);
-          document.getElementById("server-list").appendChild(string);
+          elem("server-list").appendChild(string);
         } else if (recv.t !== "MESSAGE_CREATE") {
           console.log("Unhandled " + recv.t + " event.");
         }
@@ -188,11 +189,11 @@ function connect() {
         break;
       case 7:
         disconnect(1);
-        document.getElementById("typing-status").innerHTML = "Error: Gateway Reconnection";
+        elem("typing-status").innerHTML = "Error: Gateway Reconnection";
         break;
       case 9:
         disconnect(1);
-        document.getElementById("typing-status").innerHTML = "Error: Invalid Session";
+        elem("typing-status").innerHTML = "Error: Invalid Session";
         break;
       case 10:
         pacemaker = setInterval(heartbeat, recv.d.heartbeat_interval);
@@ -213,9 +214,8 @@ function connect() {
         beating = 1;
         break;
       default:
-        disconnect(1);
-        document.getElementById("typing-status").innerHTML = "Error: Invalid State, view console";
-        console.log(recv);
+        elem("typing-status").innerHTML = "Error: Invalid State, view console";
+        disconnect(1); console.log(recv);
     }
   }
 }
