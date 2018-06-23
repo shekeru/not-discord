@@ -7,8 +7,7 @@ function disconnect(state) {
   clearInterval(decrementer);
   if (state == "0") {
     elem("typing-status").innerHTML = "Disconnected.";
-  }
-  socket.close();
+  }; socket.close();
   elem("status").innerHTML = "Waiting...";
   elem("connection").classList = "";
   elem("server-list").classList = "";
@@ -25,8 +24,7 @@ function disconnect(state) {
 }
 function heartbeat() {
   socket.send(JSON.stringify({"op":1,"d":{}}));
-  beating = 0;
-  setTimeout(reconnect, 5000);
+  beating = 0; setTimeout(reconnect, 5000);
 }
 function reconnect() {
   if (beating == 0) {
@@ -110,7 +108,7 @@ function connect() {
             string.append(guild);
             string.append(": ");
             string.append(message);
-            if (elem("msg-list").childNodes.length == 100) {
+            if (elem("msg-list").childNodes.length >= 100) {
               elem("msg-list").removeChild(elem("msg-list").childNodes[0]);
             }
             elem("msg-list").appendChild(string);
@@ -216,9 +214,8 @@ function connect() {
         beating = 1;
         break;
       default:
-        disconnect(1);
         elem("typing-status").innerHTML = "Error: Invalid State, view console";
-        console.log(recv);
+        disconnect(1); console.log(recv);
     }
   }
 }
