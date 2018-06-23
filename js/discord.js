@@ -1,3 +1,5 @@
+if (localStorage.getItem('prev_token'))
+  document.getElementById("token").defaultValue = localStorage.getItem('prev_token');
 document.getElementById("status").innerHTML = "Waiting...";
 function disconnect(state) {
   clearInterval(pacemaker);
@@ -41,10 +43,10 @@ function decrement() {
   for (var i = 0; i < Object.keys(typing_users).length; i++) {
     typing_users[Object.keys(typing_users)[i]] -= 1;
     if (typing_users[Object.keys(typing_users)[i]] == 0) {
+      document.getElementById("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
       delete typing_users[Object.keys(typing_users)[i]];
     }
   }
-  document.getElementById("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
 }
 function connect() {
   socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
@@ -103,7 +105,7 @@ function connect() {
             string.append(username);
             string.append("#");
             string.append(discriminator);
-            string.append("@");
+            string.append("elem");
             string.append(guild);
             string.append(": ");
             string.append(message);
@@ -114,8 +116,8 @@ function connect() {
             window.scrollTo(0, document.body.scrollHeight);
           }
         } else if (recv.t === "READY") {
-          console.log(recv.d);
-          user_id = recv.d.user.id;
+          localStorage.setItem("prev_token", clientToken);
+          user_id = recv.d.user.id; console.log(recv.d);
           if (recv.d.user_settings.theme === "light") {
             document.getElementById("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
           }
