@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Not Discord</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="favicon.png" type="image/png" sizes="256x256">
     <style id="filter"></style>
@@ -14,7 +14,7 @@
     <section id="typing-list">
       <span id="typing-status">Disconnected.</span>
     </section>
-    <section class="accordion" id="server-list">
+    <section id="server-list" class="btn-group-vertical">
       <button class="btn btn-outline-danger" onclick="disconnect(0)">Disconnect</button>
     </section>
     <section id="user-float" class="rainbow">
@@ -25,13 +25,87 @@
     <section id="connection">
       <div class="input-group">
         <input type="text" id="token" class="form-control" placeholder="Token">
+        <div class="input-group-append" id="serverSelector" hidden>
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Server</button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Example</a>
+          </div>
+        </div>
         <div class="input-group-append">
-          <button class="btn btn-secondary" onclick="connect()">&#x279C;</button>
+          <button class="btn btn-secondary" id="inputBox" onclick="connect()">&#x279C;</button>
         </div>
       </div>
     </section>
+    <div class="modal fade" id="modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Loading...</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-pills" id="modalChannels"></ul>
+            <div class="tab-content" id="modalChannel">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="input-group">
+              <input type="text" class="form-control" id="sendMessage" maxlength="2000" placeholder="Select channel">
+              <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="button" onclick="send()">Send</button>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="js/discord.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+      // Script to load server data into modals
+      $("#modal").on("show.bs.modal", function(event) {
+        let source = $(event.relatedTarget);
+        let id = source.data("guild");
+        let k = elem("modalChannels").childNodes.length;
+        for (var l = 0; l < k; l++) {
+          elem("modalChannels").removeChild(elem("modalChannels").childNodes[0]);
+        }
+        elem("sendMessage").placeholder = "Select channel";
+        elem("sendMessage").readOnly = true;
+        let channels = [];
+        elem("modalTitle").innerHTML = guilds[id];
+        for (var i = 0; i < data.guilds.length; i++) {
+          if (data.guilds[i].id === id) {
+            for (var j = 0; j < data.guilds[i].channels.length; j++) {
+              if (data.guilds[i].channels[j].type === 0) {
+                channels.push(data.guilds[i].channels[j]);
+              }
+            }
+          }
+        }
+        for (var i = 0; i < channels.length; i++) {
+          let tab = document.createElement("LI");
+          let tabLink = document.createElement("A");
+          tab.classList = "nav-item";
+          tabLink.classList = "nav-link";
+          tabLink.href = "#" + channels[i].id;
+          tabLink.innerHTML = "#" + channels[i].name;
+          tabLink.dataset.toggle = "tab";
+          tab.append(tabLink);
+          elem("modalChannels").append(tab);
+        }
+      });
+      $(function() {
+        $("#modalChannels li:last-child a").tab("show");
+      });
+      $("#modal").on("show.bs.tab", function(event) {
+        elem("sendMessage").placeholder = "Message " + event.target.innerHTML;
+        elem("sendMessage").readOnly = false;
+      });
+    </script>
   </body>
 </html>

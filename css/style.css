@@ -21,7 +21,7 @@ body {
   overflow-x: hidden;
   width: 0;
   padding: 0;
-  transition: all 1s ease-in-out;
+  transition: width 1s ease-in-out;
 }
 #server-list.active {
   width: 280px;
@@ -72,25 +72,42 @@ body {
   position: fixed;
   width: 100%;
   bottom: 0;
-  background-color:#23272A;
+  background-color: #23272A;
 }
 #connection {
   position: fixed;
   bottom: 0;
   right: 0;
+  left: 85%;
   padding: .4rem;
   transition: all 1s ease-in-out;
 }
 #connection.active {
-  bottom: -10%;
+  left: 9rem;
+  right: 40%;
 }
 button {
   font-size: 1.09rem;
   padding: 0;
 }
+.badge-light {
+  float: right;
+}
 #guild {
-  height: 1.1rem;
   text-overflow: ellipsis;
+  border-top: 1px solid #23272A;
+}
+.modal-lg {
+  max-width: 1200px!important;
+}
+a.nav-link {
+  color: white;
+}
+.nav-link.active {
+  background-color: #dc3545!important;
+}
+.input-group {
+
 }
 #username, #discriminator, #guild {
   color: crimson;
