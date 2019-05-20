@@ -10,6 +10,7 @@ body {
   overflow-y: hidden;
   -webkit-user-select: none;
   transition: all 2s ease-in-out;
+  font-size: 100%;
 }
 #server-list {
   position: fixed;
