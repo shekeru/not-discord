@@ -1,32 +1,32 @@
-var elem = document.getElementById.bind(document);
+var html = document.getElementById.bind(document);
 if (localStorage.getItem("prev_token"))
-  elem("token").defaultValue = localStorage.getItem("prev_token");
-elem("status").innerHTML = "Waiting...";
+  html("token").defaultValue = localStorage.getItem("prev_token");
+html("status").innerHTML = "Waiting...";
 function disconnect(state) {
   clearInterval(pacemaker);
   clearInterval(decrementer);
   if (state == "0") {
-    elem("typing-status").innerHTML = "Disconnected.";
+    html("typing-status").innerHTML = "Disconnected.";
   }; socket.close();
-  elem("token").placeholder = "Token";
+  html("token").placeholder = "Token";
   if (localStorage.getItem("prev_token"))
-    elem("token").value = localStorage.getItem("prev_token");
+    html("token").value = localStorage.getItem("prev_token");
   else
-    elem("token").value = "";
-  elem("serverSelector").hidden = true;
-  elem("inputBox").onclick = "connect()";
-  elem("status").innerHTML = "Waiting...";
-  elem("connection").classList = "";
-  elem("server-list").classList = "";
-  elem("user-float").classList = "rainbow";
-  elem("theme").innerHTML = "";
-  let j = elem("server-list").childNodes.length;
+    html("token").value = "";
+  html("serverSelector").hidden = true;
+  html("inputBox").onclick = "connect()";
+  html("status").innerHTML = "Waiting...";
+  html("connection").classList = "";
+  html("server-list").classList = "";
+  html("user-float").classList = "rainbow";
+  html("theme").innerHTML = "";
+  let j = html("server-list").childNodes.length;
   for (var i = 0; i < j; i++) {
-    elem("server-list").removeChild(elem("server-list").childNodes[0]);
+    html("server-list").removeChild(html("server-list").childNodes[0]);
   }
-  j = elem("msg-list").childNodes.length;
+  j = html("msg-list").childNodes.length;
   for (var i = 0; i < j; i++) {
-    elem("msg-list").removeChild(elem("msg-list").childNodes[0]);
+    html("msg-list").removeChild(html("msg-list").childNodes[0]);
   }
 }
 function heartbeat() {
@@ -49,7 +49,7 @@ function decrement() {
   for (var i = 0; i < Object.keys(typing_users).length; i++) {
     typing_users[Object.keys(typing_users)[i]] -= 1;
     if (typing_users[Object.keys(typing_users)[i]] == 0) {
-      elem("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
+      html("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
       delete typing_users[Object.keys(typing_users)[i]];
     }
   }
@@ -66,16 +66,16 @@ function connect() {
   typing_users = {};
   beating = 1;
   s = 0;
-  clientToken = elem("token").value;
-  elem("connection").classList += "active";
-  elem("server-list").classList += " active";
-  elem("user-float").classList += " active";
-  elem("status").innerHTML = "Connecting...";
-  elem("token").value = "";
-  elem("token").placeholder = "Message";
-  elem("serverSelector").hidden = false;
-  elem("inputBox").onclick = "send()";
-  elem("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing";
+  clientToken = html("token").value;
+  html("connection").classList += "active";
+  html("server-list").classList += " active";
+  html("user-float").classList += " active";
+  html("status").innerHTML = "Connecting...";
+  html("token").value = "";
+  html("token").placeholder = "Message";
+  html("serverSelector").hidden = false;
+  html("inputBox").onclick = "send()";
+  html("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing";
   socket.onmessage = function(event) {
     let recv = JSON.parse(event.data);
     s = recv.s;
@@ -121,10 +121,10 @@ function connect() {
             string.append(guild);
             string.append(": ");
             string.append(message);
-            if (elem("msg-list").childNodes.length >= 100) {
-              elem("msg-list").removeChild(elem("msg-list").childNodes[0]);
+            if (html("msg-list").childNodes.length >= 100) {
+              html("msg-list").removeChild(html("msg-list").childNodes[0]);
             }
-            elem("msg-list").appendChild(string);
+            html("msg-list").appendChild(string);
             window.scrollTo(0, document.body.scrollHeight);
           }
         } else if (recv.t === "READY") {
@@ -133,11 +133,11 @@ function connect() {
           user_id = recv.d.user.id;
           console.log(recv.d);
           if (recv.d.user_settings.theme === "light") {
-            elem("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
+            html("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
           }
           sessionId = recv.d.session_id;
           decrementer = setInterval(decrement, 1000);
-          elem("status").innerHTML = recv.d.user.username + "#" + recv.d.user.discriminator;
+          html("status").innerHTML = recv.d.user.username + "#" + recv.d.user.discriminator;
           if (recv.d.user.bot !== true) {
             for (var i = 0; i < recv.d.guilds.length; i++) {
               guilds[recv.d.guilds[i].id] = recv.d.guilds[i].name;
@@ -153,14 +153,14 @@ function connect() {
               members.classList = "badge badge-light";
               members.innerHTML = recv.d.guilds[i].member_count;
               button.appendChild(members)
-              elem("server-list").appendChild(button);
+              html("server-list").appendChild(button);
             }
             $(document).ready(function(){$("[data-toggle='collapse']").collapse();});
           } else {
             let bot = document.createElement("SPAN");
             bot.id = "bot";
             bot.append("BOT");
-            elem("status").appendChild(bot);
+            html("status").appendChild(bot);
           }
         } else if (recv.t === "TYPING_START") {
           console.log("t");
@@ -177,7 +177,7 @@ function connect() {
           members.append(": " + recv.d.member_count);
           string.append(guild);
           string.append(members);
-          elem("server-list").appendChild(string);
+          html("server-list").appendChild(string);
         } else if (recv.t === "MESSAGE_ACK") {
           console.log(recv.d);
         } else if (recv.t !== "MESSAGE_CREATE") {
@@ -189,11 +189,11 @@ function connect() {
         break;
       case 7:
         disconnect(1);
-        elem("typing-status").innerHTML = "Error: Gateway Reconnection";
+        html("typing-status").innerHTML = "Error: Gateway Reconnection";
         break;
       case 9:
         disconnect(1);
-        elem("typing-status").innerHTML = "Error: Invalid Session";
+        html("typing-status").innerHTML = "Error: Invalid Session";
         break;
       case 10:
         pacemaker = setInterval(heartbeat, recv.d.heartbeat_interval);
@@ -214,7 +214,7 @@ function connect() {
         beating = 1;
         break;
       default:
-        elem("typing-status").innerHTML = "Error: Invalid State, view console";
+        html("typing-status").innerHTML = "Error: Invalid State, view console";
         disconnect(1); console.log(recv);
     }
   }

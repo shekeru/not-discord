@@ -118,6 +118,13 @@ a.nav-link {
 #message {
   color: white;
 }
+pre {
+  margin: 1pt;
+}
+a {
+  color: lightskyblue!important;
+  text-decoration: none;
+}
 .highlight {
   color: lightskyblue!important;
 }
