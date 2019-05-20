@@ -5,11 +5,13 @@ var msg_list = html('messages');
 client.message_create = function(msg) {
   if (msg.webhook_id && msg.guild_id == 460140902103515143) return {};
   let message = document.createElement("pre");
-  message.innerHTML = '[<a href="discord://open/channels/{3}/{2}">{0}</a>] {1}'.format(
-    msg.author.username, msg.content, msg.channel_id, msg.guild_id || "@me");
+  message.innerHTML = '[<a href="discord://open/channels/{3}/{2}/{4}">{0}</a>] {1}'.format(
+    msg.author.username, msg.content, msg.channel_id, msg.guild_id || "@me", msg.id);
   if(!msg.guild_id)
     message.classList = "private";
   msg_list.prepend(message);
+  if (msg_list.childElementCount > 150)
+    msg_list.removeChild(msg_list.lastChild);
 }
 // Event Dispatch
 function handler(request, sender, sendResponse) {

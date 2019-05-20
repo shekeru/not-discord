@@ -14,8 +14,7 @@ system.guild_create = function(msg) {
 };
 system.message_create = function(msg) {
   let keys = Object.keys(state.messages);
-  if (keys.length > 35) {
-  //  msg_list.removeChild(msg_list.lastChild);
+  if (keys.length > 350) {
     delete state.messages[keys[0]];
   } state.messages[msg.id] = msg;
 };
