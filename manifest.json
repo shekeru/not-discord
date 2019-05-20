@@ -1,0 +1,28 @@
+{
+  "name": "Not Discord",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Modular Light Client",
+  "homepage_url": "https://desu.systems",
+  "icons": {
+    "64": "assets/favicon.png",
+    "512": "assets/favicon.png"
+  },
+  "default_locale": "en",
+  "browser_action": {
+    "default_icon": "assets/favicon.png",
+    "default_title": "Open Engine Console"
+  },
+  "background": {
+   "page": "pages/engine.html",
+   "persistent": true
+ },
+  "permissions": [
+    "https://*.discordapp.com/*",
+    "wss://*.discord.gg/*",
+    "contextMenus",
+    "storage",
+    "tabs"
+  ], "content_security_policy" :
+  "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

@@ -14,7 +14,8 @@ class Network {
     let recv = JSON.parse(event.data);
     this.current = recv.s || this.current;
     eval('api.code_{0}(recv.d,recv.t)'.format(recv.op));
-      // console.log("OPCODE:", recv.op, recv.t);
+    // console.log("OPCODE:", recv.op, recv.t);
+      chrome.runtime.sendMessage(recv);
   }
   on_error(event) {
     console.log('yep', event);

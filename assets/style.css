@@ -1,14 +1,15 @@
 @font-face {
     font-family: TenbyFive;
-    src: url("../fonts/tenby-five.otf") format("opentype");
+    src: url("../assets/tenby-five.otf") format("opentype");
 }
 body {
   background: #23272A;
   font-family: TenbyFive;
   color: white;
   overflow-x: hidden;
+  overflow-y: hidden;
   -webkit-user-select: none;
-  transition: all 1s ease-in-out;
+  transition: all 2s ease-in-out;
 }
 #server-list {
   position: fixed;
@@ -21,7 +22,7 @@ body {
   overflow-x: hidden;
   width: 0;
   padding: 0;
-  transition: width 1s ease-in-out;
+  transition: width 2s ease-in-out;
 }
 #server-list.active {
   width: 280px;
