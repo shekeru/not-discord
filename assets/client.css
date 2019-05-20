@@ -1,0 +1,175 @@
+@font-face {
+    font-family: TenbyFive;
+    src: url("../assets/tenby-five.otf") format("opentype");
+}
+body {
+  overflow: hidden;
+  font-family: monospace;
+  background: #23272A;
+  transition: all 1s ease-in-out;
+  user-select: none;
+  font-size: 100%;
+  color: white;
+  height: 100vh;
+  width: 100vw;
+  margin: 0px;
+}
+::-webkit-scrollbar {
+    width: 0px;
+}
+#msg-list {
+  overflow-y: scroll;
+  height: 100%;
+}
+pre {
+  user-select: text;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 1pt;
+  color: white;
+}
+#user-list {
+  position: fixed;
+  /* font-size: smaller; */
+  top: 5vh;
+  right: 0;
+  /* background: #2C2F33; */
+  height: 95vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 0;
+  padding: 0;
+  transition: width 1s ease-in-out;
+}
+#user-list.active {
+  width: auto;
+  padding: 1rem;
+}
+#user-float {
+  position: fixed;
+  font-family: TenbyFive;
+  font-size: 1.7rem;
+  right: .25rem;
+  top: 0;
+  transition: all 1s ease-in-out;
+}
+#user-float.active {
+  right: 285px;
+}
+#bot {
+  background-color: #7289DA;
+  color: white;
+  font-size: smaller;
+  border-radius: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: .2rem;
+}
+.btn-outline-danger {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.btn-danger {
+  float: right;
+  opacity: 0!important;
+  transition: all 1s ease-in-out;
+}
+.btn-danger.active {
+  opacity: 1!important;
+}
+#typing-list {
+  border-top: 1px dotted grey;
+  padding-top: 1rem;
+  padding-bottom: .6rem;
+  padding-left: 1rem;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background-color: #23272A;
+}
+#connection {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 85%;
+  padding: .4rem;
+  transition: all 1s ease-in-out;
+}
+#connection.active {
+  left: 9rem;
+  right: 40%;
+}
+button {
+  font-size: 1.09rem;
+  padding: 0;
+}
+.badge-light {
+  float: right;
+}
+#guild {
+  text-overflow: ellipsis;
+  border-top: 1px solid #23272A;
+}
+.modal-lg {
+  max-width: 1200px!important;
+}
+a.nav-link {
+  color: white;
+}
+.nav-link.active {
+  background-color: #dc3545!important;
+}
+.input-group {
+
+}
+#username, #discriminator, #guild {
+  color: crimson;
+}
+#msg-list div {
+  color: lightcoral;
+}
+a {
+  color: lightskyblue!important;
+  text-decoration: none;
+}
+footer {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+.highlight {
+  color: lightskyblue!important;
+}
+.private {
+  color: palegreen!important;
+}
+.rainbow {
+  animation-name: rainbow;
+  animation-duration: 50s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+@keyframes rainbow {
+  0%{color:#5c66d6}
+  5%{color:#765cd6}
+  10%{color:#8bd65c}
+  15%{color:#d65cc8}
+  20%{color:#d65cc2}
+  25%{color:#d65c7e}
+  30%{color:#cad65c}
+  35%{color:#5c7ed6}
+  40%{color:#9fd65c}
+  45%{color:#68d65c}
+  50%{color:#c25cd6}
+  55%{color:#5cd678}
+  60%{color:#5cd69b}
+  65%{color:#d2d65c}
+  70%{color:#5cd69f}
+  75%{color:#d6605c}
+  80%{color:#5cbed6}
+  85%{color:#d6bc5c}
+  90%{color:#975cd6}
+  95%{color:#5cd6b6}
+  100%{color:#d65cba}
+}
