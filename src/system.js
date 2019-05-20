@@ -5,7 +5,9 @@ system.ready = function(data){
   api.session = data.session_id;
   state.messages = state.messages || {};
   state.guilds = data.guilds.extend();
-  state.user = data.user;
+  state.authored = state.authored || {};
+  state.users = state.users || {};
+  state.profile = data.user;
   state.ready = data;
 };
 system.guild_create = function(msg) {
@@ -16,9 +18,12 @@ system.guild_create = function(msg) {
 };
 system.message_create = function(msg) {
   let keys = Object.keys(state.messages);
-  if (keys.length > 350) {
+  if (keys.length > 3500) {
     delete state.messages[keys[0]];
   } state.messages[msg.id] = msg;
+    if(msg.author.bot) return;
+  state.authored[msg.author.id] = Object.merge(state.authored[msg.author.id], {[msg.id]: msg});
+  state.users[msg.author.id] = Object.merge(state.users[msg.author.id], msg.author);
 };
 system.message_update = () => {};
 system.message_delete = () => {};
@@ -33,4 +38,5 @@ system.guild_emojis_update = () => {};
 system.user_settings_update = () => {};
 system.typing_start = () => {};
 system.message_ack = () => {};
-system.system.message_reaction_remove_all = () => {};
+system.message_reaction_remove_all = () => {};
+system.message_delete_bulk = () => {};

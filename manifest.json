@@ -3,7 +3,6 @@
   "version": "0.0.2",
   "manifest_version": 2,
   "description": "Modular Light Client",
-  "homepage_url": "https://desu.systems",
   "icons": {
     "64": "assets/favicon.png",
     "512": "assets/favicon.png"
@@ -19,6 +18,7 @@
   "permissions": [
     "https://*.discordapp.com/*",
     "wss://*.discord.gg/*",
+    "unlimitedStorage",
     "contextMenus",
     "storage",
     "tabs"

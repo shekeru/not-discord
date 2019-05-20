@@ -16,7 +16,11 @@ class Network {
     this.current = recv.s || this.current;
     eval('api.code_{0}(recv.d,recv.t)'.format(recv.op));
     // console.log("OPCODE:", recv.op, recv.t);
+    try {
       chrome.runtime.sendMessage(recv);
+    } catch {
+      console.log(recv);
+    }
   }
   on_error(event) {
     console.log('yep', event);

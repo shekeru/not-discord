@@ -18,3 +18,7 @@ if (!Array.prototype.extend) {
     {});
   }
 };
+if (!Object.merge) {
+  Object.merge = (a, b) =>
+    Object.assign(a || {}, b)
+}
