@@ -9,4 +9,12 @@ if (!String.prototype.format) {
         ? args[number] : match;
     });
   };
-}
+};
+// Array => Dict
+if (!Array.prototype.extend) {
+  Array.prototype.extend = function() {
+    return this.reduce((obj, x) =>
+      Object.assign(obj, {[x.id]: x}),
+    {});
+  }
+};

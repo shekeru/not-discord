@@ -2,9 +2,11 @@
 var system = new Object(),
   state = new Object();
 system.ready = function(data){
-  state.messages = state.message || {};
-  state.guilds = data.guilds;
+  api.session = data.session_id;
+  state.messages = state.messages || {};
+  state.guilds = data.guilds.extend();
   state.user = data.user;
+  state.ready = data;
 };
 system.guild_create = function(msg) {
   for(let i = 0; i < state.guilds.length; i++)
@@ -28,3 +30,7 @@ system.guild_integrations_update = () => {};
 system.sessions_replace = () => {};
 system.guild_role_update = () => {};
 system.guild_emojis_update = () => {};
+system.user_settings_update = () => {};
+system.typing_start = () => {};
+system.message_ack = () => {};
+system.system.message_reaction_remove_all = () => {};

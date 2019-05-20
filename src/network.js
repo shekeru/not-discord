@@ -3,6 +3,7 @@ const GATEWAY_URL = "wss://gateway.discord.gg/?v=6&encoding=json";
 class Network {
   constructor(token) {
     // Client State
+    this.session = "";
     this.token = token;
     this.current = 0;
     // Attach Handlers
@@ -33,8 +34,9 @@ class Network {
       data.heartbeat_interval);
   }
   // 	Invalid Session
-  code_9() {
-
+  code_9(data, type) {
+    this.session = "";
+    this.on_open();
   }
   // Request Guild Members
   code_8() {
@@ -50,26 +52,32 @@ class Network {
     "seq": this.current,
     "token": this.token
   });
-  code_5() {
-
-  }
+  // Voice State Update
   code_4(data, type) {
 
   }
+  // Status Update
   code_3(data, type) {
 
   }
+  // Identify
   code_2 = (d, t) => this.attempt(2, {
     "large_threshold": 135,
     "token": this.token,
     "compress": false,
-    "properties": {}
+    "properties": {
+      "$os": navigator.platform,
+      "$browser": navigator.vendor,
+      "$device": 'MLC/Not Discord'
+    }
   });
+  // Heartbeat
   code_1(data, type) {
     return () => this.attempt(1, this.current);
   }
   // Dispatch
   code_0(data, type) {
+    // Unsafe, but I like the errors, tbh
     eval('system.{0}(data)'.format(
       type.toLowerCase()));
   }
