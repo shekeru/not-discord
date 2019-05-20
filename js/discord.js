@@ -1,6 +1,6 @@
 var elem = document.getElementById.bind(document);
-if (localStorage.getItem('prev_token'))
-  elem("token").defaultValue = localStorage.getItem('prev_token');
+if (localStorage.getItem("prev_token"))
+  elem("token").defaultValue = localStorage.getItem("prev_token");
 elem("status").innerHTML = "Waiting...";
 function disconnect(state) {
   clearInterval(pacemaker);
@@ -8,6 +8,13 @@ function disconnect(state) {
   if (state == "0") {
     elem("typing-status").innerHTML = "Disconnected.";
   }; socket.close();
+  elem("token").placeholder = "Token";
+  if (localStorage.getItem("prev_token"))
+    elem("token").value = localStorage.getItem("prev_token");
+  else
+    elem("token").value = "";
+  elem("serverSelector").hidden = true;
+  elem("inputBox").onclick = "connect()";
   elem("status").innerHTML = "Waiting...";
   elem("connection").classList = "";
   elem("server-list").classList = "";
@@ -49,6 +56,7 @@ function decrement() {
 }
 function connect() {
   socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
+  data = {};
   guilds = {};
   user_id = "";
   ignoredGuilds = {};
@@ -63,13 +71,18 @@ function connect() {
   elem("server-list").classList += " active";
   elem("user-float").classList += " active";
   elem("status").innerHTML = "Connecting...";
-  elem("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing.";
+  elem("token").value = "";
+  elem("token").placeholder = "Message";
+  elem("serverSelector").hidden = false;
+  elem("inputBox").onclick = "send()";
+  elem("typing-status").innerHTML = Object.keys(typing_users).length + " users are typing";
   socket.onmessage = function(event) {
     let recv = JSON.parse(event.data);
     s = recv.s;
     switch (recv.op) {
       case 0:
         if (recv.t === "MESSAGE_CREATE" && recv.d.content !== "") {
+          //console.log(recv.d);
           if (!ignoredGuilds["g" + recv.d.guild_id]) {
             let string = document.createElement("DIV");
             let username = document.createElement("SPAN");
@@ -104,9 +117,9 @@ function connect() {
             string.append(username);
             string.append("#");
             string.append(discriminator);
-            string.append("[");
+            string.append("@");
             string.append(guild);
-            string.append("]: ");
+            string.append(": ");
             string.append(message);
             if (elem("msg-list").childNodes.length >= 100) {
               elem("msg-list").removeChild(elem("msg-list").childNodes[0]);
@@ -115,8 +128,10 @@ function connect() {
             window.scrollTo(0, document.body.scrollHeight);
           }
         } else if (recv.t === "READY") {
+          data = recv.d;
           localStorage.setItem("prev_token", clientToken);
-          user_id = recv.d.user.id; console.log(recv.d);
+          user_id = recv.d.user.id;
+          console.log(recv.d);
           if (recv.d.user_settings.theme === "light") {
             elem("theme").innerHTML = "body{background:#fff}#message{color:#737f8d}";
           }
@@ -127,36 +142,18 @@ function connect() {
             for (var i = 0; i < recv.d.guilds.length; i++) {
               guilds[recv.d.guilds[i].id] = recv.d.guilds[i].name;
               let guildId = "g" + recv.d.guilds[i].id;
-              let card = document.createElement("DIV");
-              card.classList = "card bg-dark";
-              let header = document.createElement("BUTTON");
-              header.classList = "card-header mb-0 btn d-flex justify-content-between collapsed";
-              header.setAttribute("data-toggle", "collapse");
-              header.setAttribute("data-target", "#" + guildId);
-              let guild = document.createElement("SPAN");
+              let button = document.createElement("BUTTON");
+              button.classList = "btn btn-dark";
+              button.id = "guild";
+              button.dataset.guild = recv.d.guilds[i].id;
+              button.dataset.toggle = "modal";
+              button.dataset.target = "#modal";
+              button.innerHTML = recv.d.guilds[i].name;
               let members = document.createElement("SPAN");
-              let body = document.createElement("DIV");
-              body.id = guildId;
-              body.classList = "collapse";
-              body.setAttribute("data-parent", "#server-list");
               members.classList = "badge badge-light";
-              guild.id = "guild";
-              members.id = "members";
-              for (var j = 0; j < recv.d.guilds[i].channels.length; j++) {
-                if (recv.d.guilds[i].channels[j].type === 0) {
-                  let channel = document.createElement("DIV");
-                  channel.id = "c" + recv.d.guilds[i].channels[j].id;
-                  channel.append("#" + recv.d.guilds[i].channels[j].name);
-                  body.append(channel);
-                }
-              }
-              guild.append(recv.d.guilds[i].name);
-              members.append(recv.d.guilds[i].member_count);
-              header.append(guild);
-              header.append(members);
-              card.append(header);
-              card.append(body);
-              elem("server-list").appendChild(card);
+              members.innerHTML = recv.d.guilds[i].member_count;
+              button.appendChild(members)
+              elem("server-list").appendChild(button);
             }
             $(document).ready(function(){$("[data-toggle='collapse']").collapse();});
           } else {
@@ -166,6 +163,7 @@ function connect() {
             elem("status").appendChild(bot);
           }
         } else if (recv.t === "TYPING_START") {
+          console.log("t");
           typing_users[recv.d.user_id] = 5;
         } else if (recv.t === "GUILD_CREATE") {
           guilds[recv.d.id] = recv.d.name;
@@ -180,6 +178,8 @@ function connect() {
           string.append(guild);
           string.append(members);
           elem("server-list").appendChild(string);
+        } else if (recv.t === "MESSAGE_ACK") {
+          console.log(recv.d);
         } else if (recv.t !== "MESSAGE_CREATE") {
           console.log("Unhandled " + recv.t + " event.");
         }
