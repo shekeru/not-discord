@@ -104,9 +104,9 @@ function connect() {
             string.append(username);
             string.append("#");
             string.append(discriminator);
-            string.append("elem");
+            string.append("[");
             string.append(guild);
-            string.append(": ");
+            string.append("]: ");
             string.append(message);
             if (elem("msg-list").childNodes.length >= 100) {
               elem("msg-list").removeChild(elem("msg-list").childNodes[0]);
