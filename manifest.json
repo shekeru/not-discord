@@ -1,6 +1,6 @@
 {
   "name": "Not Discord",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "manifest_version": 2,
   "description": "Modular Light Client",
   "icons": {
@@ -12,12 +12,12 @@
     "default_title": "Open Engine Console"
   },
   "background": {
-   "page": "pages/engine.html",
+   "page": "core/engine.html",
    "persistent": true
  },
   "permissions": [
-    "https://*.discordapp.com/*",
-    "wss://*.discord.gg/*",
+    "*://*.discordapp.com/*",
+    "*://*.discord.gg/*",
     "unlimitedStorage",
     "contextMenus",
     "storage",

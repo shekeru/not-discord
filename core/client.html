@@ -2,17 +2,17 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Not Discord</title>
+    <title>Alpha Chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="256x256">
-    <link rel="stylesheet" href="/assets/client.css">
+    <link rel="stylesheet" href="/assets/master.css">
   </head>
   <body>
     <section id="user-float" class="rainbow">
       <span id="status">Offline</span>
     </section>
     <section id="msg-list"></section>
-    <section id="user-list"></section>
+    <section id="user-list" class="active" hidden></section>
     <section id="config-modal" class="glowing" hidden>
       <form id="config-data">
         Account Token: <input type="text" name="token"><br>
@@ -20,12 +20,12 @@
       </form>
     </section>
     <footer>
-      <a href="">Alpha Chat</a> |
-      <a>Friends</a> |
+      <a>Alpha Chat</a> |
+      <a id="open-friends">Friends</a> |
       <a id="config-toggle">Config</a> |
-      <a>Stats</a> &nbsp;
+      <a id="stats-toggle">Stats</a> &nbsp;
     </footer>
-    <script src="/src/utils.js"></script>
-    <script src="/src/client.js"></script>
+    <script src="/core/utils.js"></script>
+    <script src="/core/client.js"></script>
   </body>
 </html>

@@ -5,7 +5,7 @@ function open_panel(chromeWindow) {
   if (!chrome.runtime.lastError && chromeWindow)
     return chrome.windows.update(windowId, {focused: true});
   chrome.windows.create({
-      url: chrome.runtime.getURL("pages/client.html"),
+      url: chrome.runtime.getURL("core/client.html"),
       type: "popup",
       focused: true,
       width: 820,
@@ -17,3 +17,11 @@ function open_panel(chromeWindow) {
 chrome.storage.sync.get(['api_key'], function(result) {
     if(result.api_key) api = new Network(result.api_key);
 });
+// Install Token
+function register(new_token) {
+  if(new_token != api.token)
+    chrome.storage.sync.set({api_key: new_token});
+  if(!api) api = new Network(new_token); else {
+    api.token = new_token; api.socket.close();
+  }
+}

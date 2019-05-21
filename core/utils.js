@@ -1,6 +1,6 @@
 // getElementById
 var getId = document.getElementById.bind(document);
-var getName = (text) => document.getElementsByName(text)[0];
+var getInput = (text) => document.getElementsByName(text)[0];
 // StackOverflow String Format
 if (!String.prototype.format) {
   String.prototype.format = function() {
@@ -22,4 +22,13 @@ if (!Array.prototype.extend) {
 if (!Object.merge) {
   Object.merge = (a, b) =>
     Object.assign(a || {}, b)
+}
+// CONSTS?
+var Relation = {
+  None: 0,
+  Friend: 1,
+  Blocked: 2,
+  Incoming: 3,
+  Outgoing: 4,
+  Implicit: 5
 }

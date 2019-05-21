@@ -1,5 +1,5 @@
 const GATEWAY_URL = "wss://gateway.discord.gg/?v=6&encoding=json";
-// Implement Weak Socket API
+// Implement Weak Socket API, todo: rewrite outside a class
 class Network {
   constructor(token) {
     // Client State
@@ -21,7 +21,7 @@ class Network {
     console.log('shit fucked', event);
   }
   on_close(event) {
-    setTimeout(api.start_socket, 1000);
+    api.start_socket();
   }
   // Heartbeat ACK
   code_11() {};
@@ -91,11 +91,5 @@ class Network {
     this.socket.send(JSON.stringify({
       op: op, d: data
     }));
-  }
-  register(new_token) {
-    if(new_token != this.token) {
-      chrome.storage.sync.set({api_key: new_token});
-      this.token = new_token; this.socket.close();
-    }
   }
 }
