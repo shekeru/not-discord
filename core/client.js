@@ -35,16 +35,16 @@ getId("config-data").onsubmit = () => {
   getId("config-modal").hidden ^= 1;
 };
 // Cunt off for now
-var length = x => Object.keys(state.authored[x]).length;
+var length_a = x => Object.keys(state.authored[x]).length;
 function sort_posters(){
   user_list.innerHTML = "";
   var result = Object.keys(state.authored);
   result.sort((a,b) => length(b) - length(a));
   for(i in result) {
     let key = result[i], name = (state.users[key] || {}).username;
-      if (i > 35 || length(key) < 1) break;
+      if (i > 35 || length_a(key) < 1) break;
     let user = document.createElement("pre");
-    user.innerHTML = "[{0}] #{1} <br>".format(name, length(key));
+    user.innerHTML = "[{0}] #{1} <br>".format(name, length_a(key));
       user_list.append(user);
   }
 }; getId("stats-toggle").onclick = () => {

@@ -16,6 +16,8 @@ class Network {
     api.current = recv.s || api.current;
     api["code_"+recv.op](recv.d, recv.t);
     chrome.runtime.sendMessage(recv);
+    if(!api["code_"+recv.op])
+      console.log('OP NEEDED:', recv.op);
   }
   on_error(event) {
     console.log('shit fucked', event);
