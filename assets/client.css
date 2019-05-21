@@ -87,17 +87,14 @@ pre {
   bottom: 0;
   background-color: #23272A;
 }
-#connection {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 85%;
-  padding: .4rem;
+#config-modal {
+  background-color: rgba(32, 34, 37, 0.85);
   transition: all 1s ease-in-out;
-}
-#connection.active {
-  left: 9rem;
-  right: 40%;
+  padding: 1rem;
+  border-radius: 2pt;
+  position: fixed;
+  top: 25%;
+  left: 25%;
 }
 button {
   font-size: 1.09rem;
@@ -131,9 +128,10 @@ a.nav-link {
 a {
   color: lightskyblue!important;
   text-decoration: none;
+  cursor: pointer;
 }
 footer {
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   right: 0px;
 }
@@ -144,13 +142,13 @@ footer {
   color: palegreen!important;
 }
 .rainbow {
-  animation-name: rainbow;
+  animation-name: rainbow-text;
   animation-duration: 50s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
   animation-fill-mode: forwards;
 }
-@keyframes rainbow {
+@keyframes rainbow-text {
   0%{color:#5c66d6}
   5%{color:#765cd6}
   10%{color:#8bd65c}
@@ -172,4 +170,36 @@ footer {
   90%{color:#975cd6}
   95%{color:#5cd6b6}
   100%{color:#d65cba}
+}
+.glowing {
+  border-width: 2pt;
+  border-style: inset;
+  animation-name: rainbow-glow;
+  animation-duration: 45s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: backwards;
+}
+@keyframes rainbow-glow {
+  0%{border-color:#5c66d6}
+  5%{border-color:#765cd6}
+  10%{border-color:#8bd65c}
+  15%{border-color:#d65cc8}
+  20%{border-color:#d65cc2}
+  25%{border-color:#d65c7e}
+  30%{border-color:#cad65c}
+  35%{border-color:#5c7ed6}
+  40%{border-color:#9fd65c}
+  45%{border-color:#68d65c}
+  50%{border-color:#c25cd6}
+  55%{border-color:#5cd678}
+  60%{border-color:#5cd69b}
+  65%{border-color:#d2d65c}
+  70%{border-color:#5cd69f}
+  75%{border-color:#d6605c}
+  80%{border-color:#5cbed6}
+  85%{border-color:#d6bc5c}
+  90%{border-color:#975cd6}
+  95%{border-color:#5cd6b6}
+  100%{border-color:#d65cba}
 }

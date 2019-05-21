@@ -9,24 +9,19 @@ class Network {
     // Attach Handlers
     this.start_socket();
   }
-  on_open = (e) => this.session ?
-    this.code_6() : this.code_2();
+  on_open = (e) => api.session ?
+    api.code_6() : api.code_2();
   on_message(event) {
     let recv = JSON.parse(event.data);
-    this.current = recv.s || this.current;
-    eval('api.code_{0}(recv.d,recv.t)'.format(recv.op));
-    // console.log("OPCODE:", recv.op, recv.t);
-    try {
-      chrome.runtime.sendMessage(recv);
-    } catch {
-      console.log(recv);
-    }
+    api.current = recv.s || api.current;
+    api["code_"+recv.op](recv.d, recv.t);
+    chrome.runtime.sendMessage(recv);
   }
   on_error(event) {
-    console.log('yep', event);
+    console.log('shit fucked', event);
   }
   on_close(event) {
-    this.start_socket();
+    setTimeout(api.start_socket, 1000);
   }
   // Heartbeat ACK
   code_11() {};
@@ -34,7 +29,7 @@ class Network {
   code_10(data, type) {
     if (this.responder)
       clearInterval(this.responder);
-    this.responder = setInterval(this.code_1(),
+    this.responder = setInterval(this.code_1,
       data.heartbeat_interval);
   }
   // 	Invalid Session
@@ -77,7 +72,7 @@ class Network {
   });
   // Heartbeat
   code_1(data, type) {
-    return () => this.attempt(1, this.current);
+    api.attempt(1, api.current);
   }
   // Dispatch
   code_0(data, type) {
@@ -85,7 +80,7 @@ class Network {
     eval('system.{0}(data)'.format(
       type.toLowerCase()));
   }
-  start_socket () {
+  start_socket() {
     this.socket = new WebSocket(GATEWAY_URL);
     this.socket.onmessage = this.on_message;
     this.socket.onerror = this.on_error;
@@ -96,5 +91,11 @@ class Network {
     this.socket.send(JSON.stringify({
       op: op, d: data
     }));
+  }
+  register(new_token) {
+    if(new_token != this.token) {
+      chrome.storage.sync.set({api_key: new_token});
+      this.token = new_token; this.socket.close();
+    }
   }
 }

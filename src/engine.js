@@ -1,6 +1,5 @@
 // Init Client
-var api = new Network(TOKEN);
-var windowId = 0;
+var api = {}, windowId = 0;
 // Enable Opening
 function open_panel(chromeWindow) {
   if (!chrome.runtime.lastError && chromeWindow)
@@ -14,3 +13,7 @@ function open_panel(chromeWindow) {
     }, (chromeWindow) => {windowId = chromeWindow.id});
 }; chrome.browserAction.onClicked.addListener((tab) =>
   chrome.windows.get(windowId, open_panel));
+// Get token?
+chrome.storage.sync.get(['api_key'], function(result) {
+    if(result.api_key) api = new Network(result.api_key);
+});

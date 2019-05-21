@@ -9,14 +9,20 @@
   </head>
   <body>
     <section id="user-float" class="rainbow">
-      <span id="status">Loading...</span>
+      <span id="status">Offline</span>
     </section>
     <section id="msg-list"></section>
     <section id="user-list"></section>
+    <section id="config-modal" class="glowing" hidden>
+      <form id="config-data">
+        Account Token: <input type="text" name="token"><br>
+        <input type="submit" value="Refresh"> Is Bot? <input type="checkbox" name="isBot">
+      </form>
+    </section>
     <footer>
-      <a>Alpha Chat</a> |
+      <a href="">Alpha Chat</a> |
       <a>Friends</a> |
-      <a>Config</a> |
+      <a id="config-toggle">Config</a> |
       <a>Stats</a> &nbsp;
     </footer>
     <script src="/src/utils.js"></script>

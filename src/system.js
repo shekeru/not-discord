@@ -7,7 +7,7 @@ system.ready = function(data){
   state.guilds = data.guilds.extend();
   state.authored = state.authored || {};
   state.users = state.users || {};
-  state.profile = data.user;
+  state.user = data.user;
   state.ready = data;
 };
 system.guild_create = function(msg) {
@@ -40,3 +40,6 @@ system.typing_start = () => {};
 system.message_ack = () => {};
 system.message_reaction_remove_all = () => {};
 system.message_delete_bulk = () => {};
+system.channel_pins_update = () => {};
+system.channel_update = () => {};
+system.channel_create = () => {};

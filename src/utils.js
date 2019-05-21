@@ -1,5 +1,6 @@
 // getElementById
-var html = document.getElementById.bind(document);
+var getId = document.getElementById.bind(document);
+var getName = (text) => document.getElementsByName(text)[0];
 // StackOverflow String Format
 if (!String.prototype.format) {
   String.prototype.format = function() {
