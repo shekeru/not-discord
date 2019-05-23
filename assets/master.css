@@ -2,13 +2,17 @@
     font-family: TenbyFive;
     src: url("../assets/tenby-five.otf") format("opentype");
 }
+/*
+yellow: #f0f080
+green: #b8f080
+*/
 body {
   overflow: hidden;
   font-family: monospace;
   background: #23272A;
   transition: all 1s ease-in-out;
   user-select: none;
-  font-size: 100%;
+  font-size: 1em;
   color: white;
   height: 100vh;
   width: 100vw;
@@ -22,10 +26,11 @@ body {
   height: 100%;
 }
 pre {
+  margin: 2px;
   user-select: text;
   white-space: pre-wrap;
   word-wrap: break-word;
-  margin: 1pt;
+  margin-bottom: 1px;
   color: white;
 }
 #user-list {
@@ -43,7 +48,7 @@ pre {
 }
 #user-list.active {
   width: auto;
-  padding: 1rem;
+  padding: 0.75rem 0rem;
 }
 #user-float {
   position: fixed;
@@ -53,9 +58,6 @@ pre {
   top: 0;
   transition: all 1s ease-in-out;
 }
-#user-float.active {
-  right: 285px;
-}
 #bot {
   background-color: #7289DA;
   color: white;
@@ -64,28 +66,6 @@ pre {
   padding-left: 5px;
   padding-right: 5px;
   margin-left: .2rem;
-}
-.btn-outline-danger {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-.btn-danger {
-  float: right;
-  opacity: 0!important;
-  transition: all 1s ease-in-out;
-}
-.btn-danger.active {
-  opacity: 1!important;
-}
-#typing-list {
-  border-top: 1px dotted grey;
-  padding-top: 1rem;
-  padding-bottom: .6rem;
-  padding-left: 1rem;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  background-color: #23272A;
 }
 #config-modal {
   background-color: rgba(32, 34, 37, 0.85);
@@ -100,46 +80,37 @@ button {
   font-size: 1.09rem;
   padding: 0;
 }
-.badge-light {
-  float: right;
-}
-#guild {
-  text-overflow: ellipsis;
-  border-top: 1px solid #23272A;
-}
-.modal-lg {
-  max-width: 1200px!important;
-}
-a.nav-link {
-  color: white;
-}
 .nav-link.active {
-  background-color: #dc3545!important;
+  background-color: #dc3545;
 }
-.input-group {
-
-}
-#username, #discriminator, #guild {
-  color: crimson;
-}
-#msg-list div {
-  color: lightcoral;
+.external {
+  color: #b8f080;
 }
 a {
-  color: lightskyblue!important;
+  color: lightskyblue;
   text-decoration: none;
   cursor: pointer;
+}
+#user-open {
+  color: lightskyblue;
+}
+i {
+  color: #f0b880;
 }
 footer {
   position: fixed;
   bottom: 0px;
   right: 0px;
 }
-.highlight {
-  color: lightskyblue!important;
+footer > a {
+  animation-name: rainbow-text;
+  animation-duration: 50s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
 }
-.private {
-  color: palegreen!important;
+.private > span {
+  color: #d875d8;
 }
 .rainbow {
   animation-name: rainbow-text;

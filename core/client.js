@@ -9,9 +9,14 @@ client.ready = function (data) {
 // MESSAGE_CREATE
 client.message_create = function(msg) {
   if (msg.webhook_id && msg.guild_id == 460140902103515143) return {};
-  let message = document.createElement("pre");
-  message.innerHTML = '[<a href="discord://open/channels/{3}/{2}/{4}">{0}</a>] {1}'.format(
-    msg.author.username, msg.content, msg.channel_id, msg.guild_id || "@me", msg.id);
+  let message = document.createElement("pre"), msg_link =
+    ('<a class="external" href="discord://open/channels/{1}/{2}/{3}">{0}</a> - '+
+    '<a id="user-open">{4}</a>').format(msg.guild_id ? state.guilds[msg.guild_id].name :
+    "Direct Message", msg.guild_id || "@me", msg.channel_id, msg.id, msg.author.username
+  ); message.innerHTML = '[{1}]<br><span>{2}{0}</span>'.format(msg.content.replace(
+    /<@!?(\d+)>/, resolve_user), msg_link, msg.content ? '&nbsp;' : '');
+  for(let i = 0; i<msg.attachments.length; i++)
+    message.innerHTML += '<div>'+i+' : '+msg.attachments[i].filename+'</div>';
   if(!msg.guild_id)
     message.classList = "private";
   if (msg_list.childElementCount > 650)
@@ -39,10 +44,10 @@ var length_a = x => Object.keys(state.authored[x]).length;
 function sort_posters(){
   user_list.innerHTML = "";
   var result = Object.keys(state.authored);
-  result.sort((a,b) => length(b) - length(a));
+  result.sort((a,b) => length_a(b) - length_a(a));
   for(i in result) {
     let key = result[i], name = (state.users[key] || {}).username;
-      if (i > 35 || length_a(key) < 1) break;
+      if (i > 30 || length_a(key) < 1) break;
     let user = document.createElement("pre");
     user.innerHTML = "[{0}] #{1} <br>".format(name, length_a(key));
       user_list.append(user);
@@ -60,3 +65,8 @@ getId("open-friends").onclick = () => {
       height: 480
   })
 };
+//Resolve User
+function resolve_user(match, capture){
+  let user = state.users[capture];
+  return "<i>{0}</i>".format(user.username);
+}

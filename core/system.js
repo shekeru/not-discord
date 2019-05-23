@@ -19,6 +19,7 @@ var system = new Object(),
   state = new Object();
 // Login Shit
 system.sessions_replace = () => {};
+system.resumed = () => {};
 system.ready = function(data){
   api.session = data.session_id;
   state.messages = state.messages || {};
@@ -36,7 +37,7 @@ system.ready = function(data){
 //Messages
 system.message_create = function(msg) {
   let keys = Object.keys(state.messages);
-  if (keys.length > 3500) {
+  if (keys.length > 2750) {
     delete state.messages[keys[0]];
   } state.messages[msg.id] = msg;
     if(msg.author.bot) return;
@@ -64,9 +65,11 @@ system.guild_create = function(msg) {
     }
 };
 system.guild_update = () => {};
+system.guild_delete = () => {};
 system.guild_integrations_update = () => {};
 system.guild_emojis_update = () => {};
 system.guild_ban_add = () => {};
+system.guild_ban_remove = () => {};
 // Guild Roles
 system.guild_role_create = () => {};
 system.guild_role_update = () => {};
@@ -79,6 +82,7 @@ system.channel_update = () => {};
 system.channel_create = () => {};
 system.channel_delete =() => {};
 // Channel Pins
+system.channel_pins_ack = () => {};
 system.channel_pins_update = () => {};
 // Voice Calls
 system.call_create = () => {};
