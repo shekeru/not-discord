@@ -34,6 +34,7 @@ system.ready = function(data){
     info['accounts'][each.user.id] = each.user;
   }); Object.assign(info.notes, data.notes);
 };
+system.user_update = () => {};
 //Messages
 system.message_create = function(msg) {
   let keys = Object.keys(state.messages);
