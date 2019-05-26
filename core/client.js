@@ -11,8 +11,8 @@ client.message_create = function(msg) {
   if (msg.webhook_id && msg.guild_id == 460140902103515143) return {};
   let message = document.createElement("pre"), msg_link =
     ('<a class="external" href="discord://open/channels/{1}/{2}/{3}">{0}</a> - '+
-    '<a id="user-open">{4}</a>').format(msg.guild_id ? state.guilds[msg.guild_id].name :
-    "Direct Message", msg.guild_id || "@me", msg.channel_id, msg.id, msg.author.username
+    '<a id="user-open" data="{5}">{4}</a>').format(msg.guild_id ? state.guilds[msg.guild_id].name :
+    "Direct Message", msg.guild_id || "@me", msg.channel_id, msg.id, msg.author.username, msg.author.user.id
   ); message.innerHTML = '[{1}]<br><span>{2}{0}</span>'.format(msg.content.replace(
     /<@!?(\d+)>/, resolve_user), msg_link, msg.content ? '&nbsp;' : '');
   for(let i = 0; i<msg.attachments.length; i++)

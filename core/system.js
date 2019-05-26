@@ -1,19 +1,20 @@
 // Dumb from State to Storage
 function cache_info() {
   chrome.storage.local.set({['info']: info});
-}; setInterval(cache_info, 30*1000);
+}; //setInterval(cache_info, 30*1000);
 // Load from Storage to State
 function decache_info() {
   chrome.storage.local.get(['info'], cache => {
     info = Object.assign(cache.info || {}, info)
   });
 }; var info = {
-  messages: {},
+  msg_by_user: dict(),
+  messages: dict(),
   // Social Triad
-  accounts: {},
-  relations: {},
-  notes: {}
-}; decache_info();
+  accounts: dict(),
+  relations: dict(),
+  notes: dict()
+}; //decache_info();
 //Base Library Logic, todo: cache system
 var system = new Object(),
   state = new Object();
@@ -44,6 +45,9 @@ system.message_create = function(msg) {
     if(msg.author.bot) return;
   state.authored[msg.author.id] = Object.merge(state.authored[msg.author.id], {[msg.id]: msg});
   state.users[msg.author.id] = Object.merge(state.users[msg.author.id], msg.author);
+  // New Message System
+  info.msg_by_user[msg.author.id][msg.id] = info.messages[msg.id] = msg;
+  info.messages.limit(750); info.msg_by_user[msg.author.id].limit(35);
 };
 system.message_update = () => {};
 system.message_delete = () => {};
@@ -59,12 +63,7 @@ system.presence_update = () => {};
 system.typing_start = () => {};
 system.message_ack = () => {};
 // Guilds
-system.guild_create = function(msg) {
-  for(let i = 0; i < state.guilds.length; i++)
-    if(state.guilds[i].id == msg.id) {
-      state.guilds[i] = msg; break;
-    }
-};
+system.guild_create = () => {};
 system.guild_update = () => {};
 system.guild_delete = () => {};
 system.guild_integrations_update = () => {};
@@ -89,3 +88,7 @@ system.channel_pins_update = () => {};
 system.call_create = () => {};
 system.call_update = () => {};
 system.call_delete = () => {};
+//Misc
+system.gift_code_update = () => {};
+system.user_guild_settings_update = () => {};
+system.webhooks_update = () => {};

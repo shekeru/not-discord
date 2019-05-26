@@ -17,10 +17,6 @@ Array.prototype.extend = function() {
 }
 Object.merge = (a, b) =>
   Object.assign(a || {}, b);
-// Easy Length
-Object.prototype.size = function() {
-  return Object.keys(this).length;
-}
 // CONSTS?
 var Relation = {
   None: 0,
@@ -30,3 +26,21 @@ var Relation = {
   Outgoing: 4,
   Implicit: 5
 }
+//Proxy System
+class default_dict {
+  get(target, key){
+    if (!target[key])
+      target[key] = dict();
+    return target[key];
+  }
+  size() {
+    return Object.keys(this).length;
+  }
+  limit(n) {
+    let keys = Object.keys(this);
+    if(keys.length > n)
+      delete this[keys[0]];
+  }
+}; var dict = () => new Proxy(
+  new default_dict, new default_dict
+);
