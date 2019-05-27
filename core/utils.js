@@ -41,6 +41,9 @@ class default_dict {
     if(keys.length > n)
       delete this[keys[0]];
   }
+  emit(n) {
+    return Object.keys(this).slice(-n);
+  }
 }; var dict = () => new Proxy(
   new default_dict, new default_dict
 );

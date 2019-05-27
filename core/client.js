@@ -1,3 +1,4 @@
+import * as html from '/lib/parts.js';
 // Hello World => Messages
 var client = new Object();
 var msg_list = getId('msg-list');
@@ -8,18 +9,15 @@ client.ready = function (data) {
 }
 // MESSAGE_CREATE
 client.message_create = function(msg) {
-  if (msg.webhook_id && msg.guild_id == 460140902103515143) return {};
-  let message = document.createElement("pre"), msg_link =
-    ('<a class="external" href="discord://open/channels/{1}/{2}/{3}">{0}</a> - '+
-    '<a id="user-open" data="{5}">{4}</a>').format(msg.guild_id ? state.guilds[msg.guild_id].name :
-    "Direct Message", msg.guild_id || "@me", msg.channel_id, msg.id, msg.author.username, msg.author.user.id
-  ); message.innerHTML = '[{1}]<br><span>{2}{0}</span>'.format(msg.content.replace(
-    /<@!?(\d+)>/, resolve_user), msg_link, msg.content ? '&nbsp;' : '');
+  if (msg.webhook_id && msg.guild_id == 460140902103515143) return;
+  let message = document.createElement("pre"); message.appendChild(html.messageHeader(msg));
+  message.innerHTML += '<span>{1}{0}</span>'.format(msg.content.replace(/<@!?(\d+)>/,resolve_user),
+    msg.content ? '&nbsp;' : '');
   for(let i = 0; i<msg.attachments.length; i++)
     message.innerHTML += '<div>'+i+' : '+msg.attachments[i].filename+'</div>';
   if(!msg.guild_id)
     message.classList = "private";
-  if (msg_list.childElementCount > 650)
+  if (msg_list.childElementCount > 450)
     msg_list.removeChild(msg_list.lastChild);
   msg_list.prepend(message);
 }
@@ -70,3 +68,6 @@ function resolve_user(match, capture){
   let user = state.users[capture];
   return "<i>{0}</i>".format(user.username);
 }
+engine.info.messages.emit(25).forEach((msg_id) =>
+  client.message_create(engine.info.messages[msg_id])
+);
