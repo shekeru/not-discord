@@ -5,7 +5,7 @@ function open_panel(chromeWindow) {
   if (!chrome.runtime.lastError && chromeWindow)
     return chrome.windows.update(windowId, {focused: true});
   chrome.windows.create({
-      url: chrome.runtime.getURL("core/client.html"),
+      url: chrome.runtime.getURL("tabs/chat.html"),
       type: "popup",
       focused: true,
       width: 820,

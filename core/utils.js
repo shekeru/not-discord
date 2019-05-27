@@ -1,6 +1,7 @@
 // getElementById
 var getId = document.getElementById.bind(document);
 var getInput = (text) => document.getElementsByName(text)[0];
+var createElement = document.createElement.bind(document);
 // StackOverflow String Format
 String.prototype.format = function() {
   let args = arguments;

@@ -38,16 +38,15 @@ system.ready = function(data){
 system.user_update = () => {};
 //Messages
 system.message_create = function(msg) {
-  let keys = Object.keys(state.messages);
-  if (keys.length > 2750) {
-    delete state.messages[keys[0]];
-  } state.messages[msg.id] = msg;
-    if(msg.author.bot) return;
-  state.authored[msg.author.id] = Object.merge(state.authored[msg.author.id], {[msg.id]: msg});
-  state.users[msg.author.id] = Object.merge(state.users[msg.author.id], msg.author);
+  if(msg.author.bot) return;
+  //state.authored[msg.author.id] = Object.merge(state.authored[msg.author.id], {[msg.id]: msg});
+  //state.users[msg.author.id] = Object.merge(state.users[msg.author.id], msg.author);
+
   // New Message System
   info.msg_by_user[msg.author.id][msg.id] = info.messages[msg.id] = msg;
   info.messages.limit(750); info.msg_by_user[msg.author.id].limit(35);
+  msg.mentions.forEach(user => info.accounts[user.id] = user);
+  info.accounts[msg.author.id] = msg.author;
 };
 system.message_update = () => {};
 system.message_delete = () => {};
